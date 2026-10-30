@@ -68,7 +68,7 @@ customer_care_emails/timestamp_date=2023-10-26/part-<run-id>.parquet
 customer_care_emails/timestamp_date=2023-10-27/part-<run-id>.parquet
 ```
 
-`timestamp_date` is derived from each source timestamp normalized to UTC. Each partition's Parquet file contains the cleaned original columns; the partition date is represented by the directory. Run-specific object names avoid overwriting previous runs. A small temporary Parquet file is created under `/tmp` inside the Airflow container and removed after upload.
+`timestamp_date` is derived from each source timestamp normalized to UTC. Each partition's Parquet file contains the cleaned original columns; the partition date is represented by the directory. Run-specific object names avoid overwriting previous runs. Temporary partition files are created under `/tmp` inside the Airflow container and removed after upload.
 
 ## Safe contract check
 

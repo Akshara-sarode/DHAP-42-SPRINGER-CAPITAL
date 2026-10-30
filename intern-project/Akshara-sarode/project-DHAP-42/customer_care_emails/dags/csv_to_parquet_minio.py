@@ -108,8 +108,7 @@ def transform_to_partitioned_parquet(**context):
 
     ti = context["ti"]
     run_token = re.sub(r"[^A-Za-z0-9_-]", "_", context["run_id"])[-80:]
-    descriptor, path = tempfile.mkstemp(prefix="dhap42-", suffix=".parquet")
-    os.close(descriptor)
+    path = tempfile.mkdtemp(prefix="dhap42-")
     try:
         frame.to_parquet(path, engine="pyarrow", index=False, partition_cols=["timestamp_date"])
         output = {"path": path, "row_count": len(frame), "run_token": run_token}
@@ -117,7 +116,8 @@ def transform_to_partitioned_parquet(**context):
         log.info("Prepared %d rows across %d UTC date partitions", len(frame), frame["timestamp_date"].nunique())
         return output
     except Exception:
-        Path(path).unlink(missing_ok=True)
+        import shutil
+        shutil.rmtree(path, ignore_errors=True)
         raise
 
 
