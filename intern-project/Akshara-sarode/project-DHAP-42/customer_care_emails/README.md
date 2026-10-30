@@ -1,6 +1,8 @@
 # DHAP-42: Customer care CSV to MinIO Parquet
 
-An end-to-end, locally reproducible Apache Airflow pipeline for the DHAP-34 `customer_care_emails` dataset. Airflow validates every CSV header, required value, timestamp, numeric value and allowed-value rule against `schema_contract.yaml`, then writes date-partitioned Parquet to a local MinIO bucket.
+An end-to-end, locally reproducible Apache Airflow pipeline for the DHAP-34 `customer_care_emails` dataset. Airflow validates every CSV header, required value, timestamp, numeric value and allowed-value rule against `schema_contract.yaml`, then writes date-partitioned Parquet to a local S3-compatible object-store bucket.
+
+The container image uses [PGSTY Silo](https://github.com/pgsty/silo), a maintained MinIO fork with compatible S3 access and a console on port 9001. The original MinIO Docker Hub images were withdrawn, so this keeps the training stack runnable with a fresh Docker installation.
 
 ## Project layout
 
@@ -41,7 +43,7 @@ Put the first generated value in `AIRFLOW_FERNET_KEY`, the second in `AIRFLOW_WE
 docker compose up --build
 ```
 
-Docker Compose initializes Airflow's metadata database and admin user, waits for MinIO, and creates the `customer-care-emails` bucket. Open:
+Docker Compose initializes Airflow's metadata database and admin user, waits for Silo, and creates the `customer-care-emails` bucket. Open:
 
 - Airflow: <http://localhost:8080> (defaults: `airflow` / `airflow`)
 - MinIO console: <http://localhost:9001> (defaults: `minioadmin` / `minioadmin123`)
