@@ -6,6 +6,12 @@ The container image uses [PGSTY Silo](https://github.com/pgsty/silo), a maintain
 
 <img width="2936" height="1602" alt="image" src="https://github.com/user-attachments/assets/63c6f5ca-c767-43d0-b4b9-2d880349b84a" />
 
+<img width="2932" height="1594" alt="image" src="https://github.com/user-attachments/assets/2ae13f50-4c09-4043-9688-32395fdb8298" />
+
+<img width="2940" height="1584" alt="image" src="https://github.com/user-attachments/assets/c5cd1a87-03d4-4d17-b97e-84381849ba23" />
+
+
+
 ## Project layout
 
 ```text
