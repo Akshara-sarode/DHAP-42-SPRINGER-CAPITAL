@@ -52,7 +52,7 @@ services:
     volumes:
       - minio-data:/data
     healthcheck:
-      test: ["CMD", "silo", "health"]
+      test: ["CMD", "silo", "healthcheck"]
       interval: 5s
       timeout: 5s
       retries: 20
