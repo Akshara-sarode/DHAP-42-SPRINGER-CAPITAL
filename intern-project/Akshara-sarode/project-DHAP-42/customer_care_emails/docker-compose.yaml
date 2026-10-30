@@ -120,7 +120,7 @@ services:
       airflow-init:
         condition: service_completed_successfully
     healthcheck:
-      test: ["CMD", "airflow", "jobs", "check", "--job-type", "SchedulerJob", "--hostname", "$${HOSTNAME}"]
+      test: ["CMD-SHELL", "airflow jobs check --job-type SchedulerJob --hostname \"$${HOSTNAME}\""]
       interval: 10s
       timeout: 10s
       retries: 12
