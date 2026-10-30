@@ -58,18 +58,35 @@ services:
       retries: 20
     restart: unless-stopped
   minio-init:
-    image: docker.io/pgsty/silo:RELEASE.2026-10-26T00-00-00Z
+    build: .
+    image: ${AIRFLOW_IMAGE_NAME:-dhap42-airflow:local}
     depends_on:
       minio:
         condition: service_healthy
-    entrypoint: ["/bin/sh", "-c"]
-    command: >-
-      mcli alias set local http://minio:9000 "$${MINIO_ROOT_USER}" "$${MINIO_ROOT_PASSWORD}" &&
-      mcli mb --ignore-existing "local/$${MINIO_BUCKET}"
+    entrypoint: ["python"]
+    command:
+      - -c
+      - |
+        import os
+        import boto3
+        from botocore.config import Config
+        from botocore.exceptions import ClientError
+        client = boto3.client("s3", endpoint_url=os.environ["MINIO_ENDPOINT"], aws_access_key_id=os.environ["AWS_ACCESS_KEY_ID"], aws_secret_access_key=os.environ["AWS_SECRET_ACCESS_KEY"], region_name=os.environ["AWS_DEFAULT_REGION"], config=Config(s3={"addressing_style": "path"}))
+        bucket = os.environ["MINIO_BUCKET"]
+        try:
+            client.head_bucket(Bucket=bucket)
+            print(f"Bucket already exists: {bucket}")
+        except ClientError as error:
+            if error.response.get("Error", {}).get("Code") not in {"404", "NoSuchBucket", "NotFound"}:
+                raise
+            client.create_bucket(Bucket=bucket)
+            print(f"Created bucket: {bucket}")
     environment:
-      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
-      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin123}
+      MINIO_ENDPOINT: ${MINIO_ENDPOINT:-http://minio:9000}
       MINIO_BUCKET: ${MINIO_BUCKET:-customer-care-emails}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-minioadmin}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-minioadmin123}
+      AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION:-us-east-1}
     restart: "no"
   airflow-init:
     <<: *airflow-common
