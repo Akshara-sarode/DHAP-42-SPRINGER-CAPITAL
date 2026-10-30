@@ -1,0 +1,16 @@
+dataset: customer_care_emails
+version: 1
+columns:
+  - {name: subject, type: string, nullable: false}
+  - {name: sender, type: string, nullable: false}
+  - {name: receiver, type: string, nullable: false}
+  - {name: timestamp, type: timestamp_utc, nullable: false}
+  - {name: message_body, type: string, nullable: false}
+  - {name: thread_id, type: string, nullable: false}
+  - {name: email_types, type: string, nullable: false}
+  - {name: email_status, type: string, nullable: false, allowed_values: [ongoing, completed]}
+  - {name: email_criticality, type: string, nullable: false, allowed_values: [low, medium, high]}
+  - {name: product_types, type: string, nullable: false}
+  - {name: agent_effectivity, type: string, nullable: false, allowed_values: [low, medium, high]}
+  - {name: agent_efficiency, type: string, nullable: false, allowed_values: [very low, low, medium, high, very high]}
+  - {name: customer_satisfaction, type: float64, nullable: false, minimum: 0, maximum: 1}

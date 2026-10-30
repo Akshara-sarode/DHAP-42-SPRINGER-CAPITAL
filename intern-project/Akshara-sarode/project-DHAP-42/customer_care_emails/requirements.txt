@@ -1,0 +1,4 @@
+pandas==2.2.3
+pyarrow==18.1.0
+PyYAML==6.0.2
+boto3==1.35.99

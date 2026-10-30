@@ -1,0 +1,15 @@
+dataset: customer_care_emails
+project: DHAP-42
+description: Customer care email records reused from DHAP-34 and delivered as partitioned Parquet.
+source:
+  type: local_csv
+  path: dags/extraction/sample.csv
+  origin: DHAP-34 project dataset supplied with this task
+owner: Akshara-sarode
+status: done
+contract: schema_contract.yaml
+partition_column: timestamp
+destination:
+  type: minio
+  bucket: customer-care-emails
+  prefix: customer_care_emails/
