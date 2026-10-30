@@ -19,6 +19,7 @@ x-airflow-common: &airflow-common
   user: "${AIRFLOW_UID:-50000}:0"
   volumes:
     - ./dags:/opt/airflow/dags:ro
+    - ./schema_contract.yaml:/opt/airflow/schema_contract.yaml:ro
     - airflow-logs:/opt/airflow/logs
   depends_on:
     airflow-db:
